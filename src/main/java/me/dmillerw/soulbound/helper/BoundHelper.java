@@ -28,8 +28,7 @@ public class BoundHelper {
 
     public static void bindItem(EntityPlayer player, ItemStack itemStack, boolean canDrop, boolean canMove, boolean keepOnDeath) {
         NBTTagCompound tag = new NBTTagCompound();
-        tag.setLong(Reference.NBT_KEY_OWNER_MOST, player.getGameProfile().getId().getMostSignificantBits());
-        tag.setLong(Reference.NBT_KEY_OWNER_LEAST, player.getGameProfile().getId().getLeastSignificantBits());
+        tag.setString(Reference.NBT_KEY_OWNER, player.getGameProfile().getId().toString());
         tag.setBoolean(Reference.NBT_KEY_CAN_DROP, canDrop);
         tag.setBoolean(Reference.NBT_KEY_CAN_MOVE, canMove);
         tag.setBoolean(Reference.NBT_KEY_KEEP_ON_DEATH, keepOnDeath);
@@ -49,9 +48,7 @@ public class BoundHelper {
         tag = tag.getCompoundTag(Reference.NBT_KEY_SOULBOUND);
 
         Data data = new Data();
-        data.owner = new UUID(
-            NBTHelper.getLong(tag, Reference.NBT_KEY_OWNER_MOST),
-            NBTHelper.getLong(tag, Reference.NBT_KEY_OWNER_LEAST));
+        data.owner = UUID.fromString(NBTHelper.getString(tag, Reference.NBT_KEY_OWNER));
         data.canDrop = NBTHelper.getBoolean(tag, Reference.NBT_KEY_CAN_DROP);
         data.canMove = NBTHelper.getBoolean(tag, Reference.NBT_KEY_CAN_MOVE);
         data.keepOnDeath = NBTHelper.getBoolean(tag, Reference.NBT_KEY_KEEP_ON_DEATH);

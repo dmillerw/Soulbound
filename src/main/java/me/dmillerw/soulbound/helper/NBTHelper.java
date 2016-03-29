@@ -17,6 +17,13 @@ public class NBTHelper {
         return tag;
     }
 
+    public static String getString(NBTTagCompound tag, String key) {
+        if (!tag.hasKey(key)) {
+            throw new IllegalStateException("[Soulbound]: Tried to construct Soulbound data from invalid NBT tag");
+        }
+        return tag.getString(key);
+    }
+
     public static long getLong(NBTTagCompound tag, String key) {
         if (!tag.hasKey(key)) {
             throw new IllegalStateException("[Soulbound]: Tried to construct Soulbound data from invalid NBT tag");
@@ -27,22 +34,6 @@ public class NBTHelper {
     public static boolean getBoolean(NBTTagCompound tag, String key) {
         if (!tag.hasKey(key)) {
             throw new IllegalStateException("[Soulbound]: Tried to construct Soulbound data from invalid NBT tag");
-        }
-        return tag.getBoolean(key);
-    }
-
-    public static long getLong(NBTTagCompound tag, String key, long def) {
-        if (!tag.hasKey(key)) {
-            tag.setLong(key, def);
-            return def;
-        }
-        return tag.getLong(key);
-    }
-
-    public static boolean getBoolean(NBTTagCompound tag, String key, boolean def) {
-        if (!tag.hasKey(key)) {
-            tag.setBoolean(key, def);
-            return def;
         }
         return tag.getBoolean(key);
     }
