@@ -20,7 +20,15 @@ import java.util.UUID;
  */
 public class EventHandler {
 
-    private static Map<UUID, List<ItemStack>> toReAdd = Maps.newHashMap();
+    @SubscribeEvent
+    public void onPlayerPickupItem(PlayerEvent.ItemPickupEvent event) {
+        BoundHelper.Data data = BoundHelper.getData(event.pickedUp.getEntityItem());
+        if (data == null)
+            return;
+
+        if (!data.isOwner(event.player))
+            event.setCanceled(true);
+    }
 
     @SubscribeEvent
     public void onPlayerDropItem(ItemTossEvent event) {
@@ -40,6 +48,8 @@ public class EventHandler {
         }
     }
 
+    private static Map<UUID, List<ItemStack>> toReAdd = Maps.newHashMap();
+
     @SubscribeEvent
     public void onPlayerDrops(PlayerDropsEvent event) {
         ArrayList<EntityItem> newDrops = Lists.newArrayList();
@@ -53,7 +63,7 @@ public class EventHandler {
             ItemStack item = drop.getEntityItem().copy();
 
             if (data.isOwner(event.entityPlayer) && data.keepOnDeath) {
-                toSave.add(item);
+                toSave.add(item.copy());
                 event.entityPlayer.inventory.addItemStackToInventory(item);
                 drop.setDead();
             } else {
